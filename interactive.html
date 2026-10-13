@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Interactive Demo</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; max-width: 700px; margin: auto; transition: background-color 0.3s, color 0.3s; }
+        .dark-mode { background-color: #1a1a2e; color: #e0e0e0; }
+        .warning { color: #e74c3c; font-weight: bold; }
+        .ok { color: #27ae60; }
+        button { padding: 8px 16px; cursor: pointer; margin: 4px; }
+        .task-item { padding: 8px; margin: 4px 0; background: #f0f0f0; border-radius: 4px; display: flex; justify-content: space-between; }
+        .dark-mode .task-item { background: #2a2a4a; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Interactive Demo</h1>
+
+    <section>
+        <h2>1. Dark Mode Toggle</h2>
+        <button id="toggle-btn">Toggle Dark Mode</button>
+    </section>
+    <hr>
+
+    <section>
+        <h2>2. Character Counter</h2>
+        <textarea id="text-input" rows="4" cols="50" placeholder="Type something..."></textarea>
+        <p>Characters: <span id="char-count" class="ok">0</span> / 200</p>
+    </section>
+    <hr>
+
+    <section>
+        <h2>3. Dynamic Task List</h2>
+        <input type="text" id="task-input" placeholder="Add a task...">
+        <button id="add-task-btn">Add</button>
+        <div id="task-list"></div>
+    </section>
+
+    <script>
+        // --- Feature 1: Dark Mode Toggle ---
+        const toggleBtn = document.querySelector("#toggle-btn");
+
+        toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+        });
+
+        // --- Feature 2: Character Counter ---
+        const textInput = document.querySelector("#text-input");
+        const charCount = document.querySelector("#char-count");
+        const MAX_CHARS = 200;
+
+        textInput.addEventListener("input", () => {
+            const count = textInput.value.length;
+            charCount.textContent = count;
+
+            if (count > MAX_CHARS) {
+                charCount.style.color = "";          // clear leftover orange
+                charCount.className = "warning";
+            } else if (count > MAX_CHARS * 0.8) {
+                charCount.className = "";
+                charCount.style.color = "#f39c12";   // orange
+            } else {
+                charCount.style.color = "";          // clear leftover orange
+                charCount.className = "ok";
+            }
+        });
+
+        // --- Feature 3: Dynamic Task List ---
+        const taskInput = document.querySelector("#task-input");
+        const addTaskBtn = document.querySelector("#add-task-btn");
+        const taskList = document.querySelector("#task-list");
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText === "") return;
+
+            const taskItem = document.createElement("div");
+            taskItem.className = "task-item";
+
+            const textSpan = document.createElement("span");
+            textSpan.textContent = taskText;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.addEventListener("click", () => {
+                taskItem.remove();
+            });
+
+            taskItem.appendChild(textSpan);
+            taskItem.appendChild(deleteBtn);
+            taskList.appendChild(taskItem);
+
+            taskInput.value = "";
+            taskInput.focus();
+        }
+
+        addTaskBtn.addEventListener("click", addTask);
+
+        taskInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") addTask();
+        });
+    </script>
+</body>
+</html>

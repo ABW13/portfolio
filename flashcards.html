@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        #progress {
+            color: #666;
+            margin-bottom: 16px;
+        }
+        #card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 32px 20px;
+            background: #fafafa;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        #question {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        #answer {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #27ae60;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 16px 6px 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flashcards</h1>
+    <p id="progress"></p>
+
+    <div id="card">
+        <p id="question"></p>
+        <p id="answer"></p>
+    </div>
+
+    <button id="show-btn">Show Answer</button>
+    <button id="next-btn">Next</button>
+
+    <script>
+        // Question/answer pairs
+        const cards = [
+            { question: "What does HTTP stand for?", answer: "HyperText Transfer Protocol" },
+            { question: "What status code means 'Not Found'?", answer: "404" },
+            { question: "What does CSS stand for?", answer: "Cascading Style Sheets" },
+            { question: "What does DOM stand for?", answer: "Document Object Model" },
+            { question: "What Python library do we use for HTTP requests?", answer: "requests" }
+        ];
+
+        // State: which card we're on
+        let currentIndex = 0;
+
+        // Find the elements
+        const progressEl = document.querySelector("#progress");
+        const questionEl = document.querySelector("#question");
+        const answerEl = document.querySelector("#answer");
+        const showBtn = document.querySelector("#show-btn");
+        const nextBtn = document.querySelector("#next-btn");
+
+        // Draw the current card on screen
+        function showCard() {
+            const card = cards[currentIndex];
+            progressEl.textContent = "Card " + (currentIndex + 1) + " of " + cards.length;
+            questionEl.textContent = card.question;
+            answerEl.textContent = card.answer;
+            answerEl.style.display = "none";   // hide the answer on every new card
+        }
+
+        // Show Answer button
+        showBtn.addEventListener("click", () => {
+            answerEl.style.display = "block";
+        });
+
+        // Next button: move on and loop back to the start after the last card
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % cards.length;
+            showCard();
+        });
+
+        // Show the first card when the page loads
+        showCard();
+    </script>
+</body>
+</html>
